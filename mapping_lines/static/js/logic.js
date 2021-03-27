@@ -7,9 +7,9 @@ console.log('working');
 
 let map = L.map('mapid', {
     center: [
-        34.0522, -118.2437
+        36.1988, -95.8839
     ],
-    zoom: 4
+    zoom: 5
 });
 
 // Add a marker
@@ -33,16 +33,31 @@ let map = L.map('mapid', {
 // Get data from cities.js
 // let cityData = cities;
 
-cities.forEach(city => {
-    console.log(city)
-    L.circleMarker(city.location, {
-        radius: city.population / 100000,
-        fillColor: 'orange',
-        fillOpacity: '0.25',
-        color: 'orange',
-        weight: '4'
-    }).bindPopup("<h2>" + city.city + ", " + city.state + "</h2> <hr> <h3>Population: " + city.population.toLocaleString() + "</h3>").addTo(map);
-});
+// cities.forEach(city => {
+//     console.log(city)
+//     L.circleMarker(city.location, {
+//         radius: city.population / 100000,
+//         fillColor: 'orange',
+//         fillOpacity: '0.25',
+//         color: 'orange',
+//         weight: '4'
+//     }).bindPopup("<h2>" + city.city + ", " + city.state + "</h2> <hr> <h3>Population: " + city.population.toLocaleString() + "</h3>").addTo(map);
+// });
+
+let line = [
+    [33.9416, -118.4085],
+    [30.1975, -97.6664],
+    [36.1988, -95.8839],
+    [43.6777, -79.6248],
+    [40.6416, -73.7781]
+];
+
+L.polyline(line, {
+    color: 'blue',
+    weight: '2',
+    dashArray: '10',
+    opacity: '0.5',
+}).addTo(map);
 
 
 // We create the tile layer that will be the background of our map.
@@ -52,7 +67,7 @@ let streets = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{
     maxZoom: 18,
     zoomOffset: -1,
     // additional map styles (for 'id' below) found here: https://docs.mapbox.com/api/maps/styles/
-    id: 'mapbox/dark-v10',
+    id: 'mapbox/light-v10',
     accessToken: API_KEY
 });
 // Then we add our 'graymap' tile layer to the map.
