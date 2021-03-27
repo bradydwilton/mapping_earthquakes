@@ -9,7 +9,7 @@ let map = L.map('mapid', {
     center: [
         34.0522, -118.2437
     ],
-    zoom: 14
+    zoom: 4
 });
 
 // Add a marker
@@ -24,11 +24,25 @@ let map = L.map('mapid', {
 // }).addTo(map);
 
 // Add a circle with a radius with a fixed pixel length
-let marker = L.circleMarker([34.0522, -118.2437], {
-    radius: 300,
-    color: 'black',
-    fillColor: '#ffffa1'
-}).addTo(map);
+// let marker = L.circleMarker([34.0522, -118.2437], {
+//     radius: 300,
+//     color: 'black',
+//     fillColor: '#ffffa1'
+// }).addTo(map);
+
+// Get data from cities.js
+// let cityData = cities;
+
+cities.forEach(city => {
+    console.log(city)
+    L.circleMarker(city.location, {
+        radius: city.population / 100000,
+        fillColor: 'orange',
+        fillOpacity: '0.25',
+        color: 'orange',
+        weight: '4'
+    }).bindPopup("<h2>" + city.city + ", " + city.state + "</h2> <hr> <h3>Population: " + city.population.toLocaleString() + "</h3>").addTo(map);
+});
 
 
 // We create the tile layer that will be the background of our map.
