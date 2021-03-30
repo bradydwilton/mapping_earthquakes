@@ -8,7 +8,7 @@ let streets = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{
     maxZoom: 18,
     zoomOffset: -1,
     // additional map styles (for 'id' below) found here: https://docs.mapbox.com/api/maps/styles/
-    id: 'mapbox/satellite-streets-v10',
+    id: 'mapbox/streets-v11',
     accessToken: API_KEY
 });
 
@@ -32,42 +32,53 @@ let light = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}
     accessToken: API_KEY
 });
 
+let satelliteStreets = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> <strong><a href="https://www.mapbox.com/map-feedback/" target="_blank">Improve this map</a></strong>',
+    tileSize: 512,
+    maxZoom: 18,
+    zoomOffset: -1,
+    // additional map styles (for 'id' below) found here: https://docs.mapbox.com/api/maps/styles/
+    id: 'mapbox/satellite-streets-v10',
+    accessToken: API_KEY
+});
+
 // Create array of basemaps
 let baseMaps = {
-    Light: light,
-    Dark: dark,
-    // Street: streets
+    // 'Light': light,
+    // 'Dark': dark,
+    'Street': streets,
+    'Satellite Streets': satelliteStreets
 };
 
 // Create map object
 let map = L.map('mapid', {
     center: [
-        44, -80
+        43.7, -79.3
     ],
-    zoom: 2,
-    layers: [dark]
+    zoom: 11,
+    layers: [streets]
 });
 
 // Add layer control options to map
 L.control.layers(baseMaps).addTo(map);
 
 
-const torontoRoutes = 'https://raw.githubusercontent.com/bradydwilton/mapping_earthquakes/mapping_geojson_linestrings/torontoRoutes.json'
+const torontoHoods = 'https://raw.githubusercontent.com/bradydwilton/mapping_earthquakes/mapping_geojson_polygons/torontoNeighborhoods.json'
 
 let mapStyle = {
-    color: 'lightGreen',
-    weight: 2
+    color: 'blue',
+    weight: 1,
+    fillColor: 'yellow',
+    dashArray: 5
 };
 
-let torontoData = d3.json(torontoRoutes).then(data => {
+let torontoData = d3.json(torontoHoods).then(data => {
     console.log(data);
     L.geoJSON(data, {
         style: mapStyle,
         onEachFeature: (feature, layer) => {
             const underscore = '_';
-            const popupTemplate = `<h3>Airline: ${feature.properties.airline}</h3>
-                                    <h5>${underscore.repeat(40)}</h5>
-                                    <h4>Destination: ${feature.properties.dst}</h4>`;
+            const popupTemplate = `<h3>Area: ${feature.properties.AREA_NAME}`;
             layer.bindPopup(popupTemplate);
         }
     }).addTo(map);
