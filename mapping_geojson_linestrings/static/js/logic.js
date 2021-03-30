@@ -141,7 +141,7 @@ let light = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}
 let baseMaps = {
     Light: light,
     Dark: dark,
-    Street: streets
+    // Street: streets
 };
 
 let map = L.map('mapid', {
@@ -149,24 +149,29 @@ let map = L.map('mapid', {
         44, -80
     ],
     zoom: 2,
-    layers: [light]
+    layers: [dark]
 });
 
 L.control.layers(baseMaps).addTo(map);
 
 
-const majorAirports = 'https://raw.githubusercontent.com/bradydwilton/mapping_earthquakes/mapping_geojson_points/majorAirports.json'
+const torontoRoutes = 'https://raw.githubusercontent.com/bradydwilton/mapping_earthquakes/mapping_geojson_linestrings/torontoRoutes.json'
 
-let airportData = d3.json(majorAirports).then(data => {
+let mapStyle = {
+    color: 'lightGreen',
+    weight: 2
+};
+
+let torontoData = d3.json(torontoRoutes).then(data => {
     console.log(data);
     L.geoJSON(data, {
+        style: mapStyle,
         onEachFeature: (feature, layer) => {
             const underscore = '_';
-            const popupTemplate = `<b>Airport Code: </b>${feature.properties.faa}
-                </br><b>${underscore.repeat(40)}
-                </br>
-                </br>Airport Name: </b>${feature.properties.name}`;
-            layer.bindPopup(popupTemplate)
+            const popupTemplate = `<h3>Airline: ${feature.properties.airline}</h3>
+                                    <h5>${underscore.repeat(40)}</h5>
+                                    <h4>Destination: ${feature.properties.dst}</h4>`;
+            layer.bindPopup(popupTemplate);
         }
     }).addTo(map);
 });
