@@ -114,9 +114,8 @@ let earthquakeData = d3.json(earthquakes).then(data => {
     L.geoJSON(data, {
         style: styleInfo,
         pointToLayer: (feature, latlng) => {
-            const underscore = '_';
-            const popupTemplate = `<h3>Magnitude: ${feature.properties.mag}</h3></br>
-                                    <h3>Location: ${feature.properties.place}</h3>`
+            const popupTemplate = `Magnitude: ${feature.properties.mag}<br>
+                                    Location: ${feature.properties.place}`
             return L.circleMarker(latlng).bindPopup(popupTemplate);
         }
     }).addTo(map);
