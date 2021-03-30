@@ -128,17 +128,28 @@ let dark = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?
     accessToken: API_KEY
 });
 
+let light = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> <strong><a href="https://www.mapbox.com/map-feedback/" target="_blank">Improve this map</a></strong>',
+    tileSize: 512,
+    maxZoom: 18,
+    zoomOffset: -1,
+    // additional map styles (for 'id' below) found here: https://docs.mapbox.com/api/maps/styles/
+    id: 'mapbox/light-v10',
+    accessToken: API_KEY
+});
+
 let baseMaps = {
-    Street: streets,
-    Dark: dark
+    Light: light,
+    Dark: dark,
+    Street: streets
 };
 
 let map = L.map('mapid', {
     center: [
-        40.7, -94.5
+        44, -80
     ],
-    zoom: 4,
-    layers: [streets]
+    zoom: 2,
+    layers: [light]
 });
 
 L.control.layers(baseMaps).addTo(map);
