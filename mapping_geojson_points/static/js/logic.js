@@ -5,12 +5,6 @@ console.log('working');
 // Create the map object with a center and zoom level
 // let map = L.map('mapid').setView([40.7, -94.5], 4);
 
-let map = L.map('mapid', {
-    center: [
-        30, -30
-    ],
-    zoom: 3
-});
 
 // Add a marker
 // let marker = L.marker([34.0522, -118.2437]).addTo(map)
@@ -118,11 +112,37 @@ let streets = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{
     maxZoom: 18,
     zoomOffset: -1,
     // additional map styles (for 'id' below) found here: https://docs.mapbox.com/api/maps/styles/
-    id: 'mapbox/outdoors-v11',
+    id: 'mapbox/satellite-streets-v10',
     accessToken: API_KEY
 });
 // Then we add our 'graymap' tile layer to the map.
-streets.addTo(map);
+// streets.addTo(map);
+
+let dark = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> <strong><a href="https://www.mapbox.com/map-feedback/" target="_blank">Improve this map</a></strong>',
+    tileSize: 512,
+    maxZoom: 18,
+    zoomOffset: -1,
+    // additional map styles (for 'id' below) found here: https://docs.mapbox.com/api/maps/styles/
+    id: 'mapbox/dark-v10',
+    accessToken: API_KEY
+});
+
+let baseMaps = {
+    Street: streets,
+    Dark: dark
+};
+
+let map = L.map('mapid', {
+    center: [
+        40.7, -94.5
+    ],
+    zoom: 4,
+    layers: [streets]
+});
+
+L.control.layers(baseMaps).addTo(map);
+
 
 const majorAirports = 'https://raw.githubusercontent.com/bradydwilton/mapping_earthquakes/mapping_geojson_points/majorAirports.json'
 
