@@ -96,7 +96,6 @@ function styleInfo(feature) {
     };
 }
 
-// let earthquakeArray = [];
 var earthquakes = new L.layerGroup();
 
 let earthquakeData = d3.json(earthquakeURL).then(data => {
@@ -110,9 +109,6 @@ let earthquakeData = d3.json(earthquakeURL).then(data => {
         }
     }).addTo(earthquakes);
 });
-// console.log(earthquakeArray);
-
-// var earthquakeLayer = L.layerGroup(earthquakeArray);
 
 // Create array of basemaps
 let overlays = {
@@ -127,6 +123,29 @@ let map = L.map('mapid', {
     zoom: 3,
     layers: [streets, earthquakes]
 });
+
+var legend = L.control({
+    position: 'bottomright'
+});
+
+legend.onAdd = function () {
+    let div = L.DomUtil.create('div', 'info legend');
+    const magnitudes = [0, 1, 2, 3, 4, 5];
+    const colors = ['#98ee00', '#d4ee00', '#eecc00', '#ee9c00', 'orange', 'red'];
+
+    // Loop through intervals to generate a label with a colored square fore each interval
+    for (var i = 0; i < magnitudes.length; i++) {
+        console.log(colors[i]);
+        div.innerHTML +=
+            "<i style='background: " + colors[i] + "'></i> " + magnitudes[i] + (magnitudes[i + 1] ? "&ndash;" + magnitudes[i + 1] + "<br>" : "+");
+    }
+    return div;
+};
+
+
+
+
+legend.addTo(map);
 
 // Add layer control options to map
 L.control.layers(baseMaps, overlays).addTo(map);
