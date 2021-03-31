@@ -50,20 +50,7 @@ let baseMaps = {
     'Satellite': satelliteStreets
 };
 
-// Create map object
-let map = L.map('mapid', {
-    center: [
-        39.5, -98.5
-    ],
-    zoom: 3,
-    layers: [streets]
-});
-
-// Add layer control options to map
-L.control.layers(baseMaps).addTo(map);
-
-
-const earthquakes = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson'
+const earthquakeURL = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson'
 
 let mapStyle = {
     color: 'red',
@@ -109,8 +96,10 @@ function styleInfo(feature) {
     };
 }
 
+// let earthquakeArray = [];
+var earthquakes = new L.layerGroup();
 
-let earthquakeData = d3.json(earthquakes).then(data => {
+let earthquakeData = d3.json(earthquakeURL).then(data => {
     console.log(data);
     L.geoJSON(data, {
         style: styleInfo,
@@ -119,6 +108,27 @@ let earthquakeData = d3.json(earthquakes).then(data => {
                                     <b>Location: </b>${feature.properties.place}`
             return L.circleMarker(latlng).bindPopup(popupTemplate);
         }
-    }).addTo(map);
+    }).addTo(earthquakes);
 });
+// console.log(earthquakeArray);
+
+// var earthquakeLayer = L.layerGroup(earthquakeArray);
+
+// Create array of basemaps
+let overlays = {
+    'Earthquakes': earthquakes
+};
+
+
+// Create map object
+let map = L.map('mapid', {
+    center: [
+        39.5, -98.5
+    ],
+    zoom: 3,
+    layers: [streets, earthquakes]
+});
+
+// Add layer control options to map
+L.control.layers(baseMaps, overlays).addTo(map);
 
