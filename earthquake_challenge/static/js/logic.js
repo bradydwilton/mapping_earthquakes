@@ -110,9 +110,19 @@ let earthquakeData = d3.json(earthquakeURL).then(data => {
     }).addTo(earthquakes);
 });
 
+const tectonicPlatesURL = 'https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json';
+
+let tectonicStyle = {
+    color: 'red',
+    stroke: true,
+    weight: 0.5
+}
+
+
 // Create array of basemaps
 let overlays = {
-    'Earthquakes': earthquakes
+    'Earthquakes': earthquakes,
+    'Tectonic Plates': tectonicPlates
 };
 
 // Create map object
